@@ -84,15 +84,15 @@ shinyUI(fluidPage(
                  plotOutput("meica.mefcz", height = 300, width = 400)),
         tabPanel("Motion Metrics",
                  p("blah blah"),
-                 tableOutput("abs.mean.disp")),
+                 uiOutput("quantmeasures")),
         tabPanel("Registrations",
                  p("blah blah blah"),
                  h3("TSOC to T1"),
-                 plotOutput("tsocT1", width = 800),
+                 plotOutput("tsocT1", width = 800, inline = TRUE),
                  h3("TSOC to Subject-Specific Template"),
-                 plotOutput("tsocCT", width = 800),
+                 plotOutput("tsocCT", width = 800, inline = TRUE),
                  h3("TSOC to MNI"),
-                 plotOutput("tsocMNI", width = 800))
+                 plotOutput("tsocMNI", width = 800, inline = TRUE))
       )
   )
 )))

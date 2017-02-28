@@ -76,16 +76,14 @@ function(input, output, session) {
     list(src = filename)}, deleteFile = FALSE)
   
   #quantitative measures
-  #output$abs.mean.disp <- renderText({
-   # normalizePath(file.path("./www", paste(input$subid, "/rest-on_data_abs_mean.rms", sep = "")))})
-  #output$rel.mean.disp <- 
-  #measures <- read.csv(normalizePath(file.path("./www", paste(input$subid, "/rest-on_data_abs_mean.rms", sep = ""))))
-  measures <- reactive({
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_data_abs_mean.rms", sep = "")))
-    quant <- read.csv(filename)
-    quant
-  })
-  output$abs.mean.disp <- renderText({ measures() })
+  output$quantmeasures <- renderUI({
+    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_motion.Rmd", sep = "")), 
+                                       quiet = TRUE)))})
+  
+  #acquisition parameters
+  output$acqpar <- renderUI({
+    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_parrec.Rmd", sep = "")), 
+                                       quiet = TRUE)))})
   
   #form
   observe({
@@ -109,11 +107,6 @@ function(input, output, session) {
   }
   
   observeEvent(input$submit, {saveData(formData())})
-  
-  #acqpar rmarkdown
-  output$acqpar <- renderUI({
-    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_parrec.Rmd", sep = "")), 
-                                       quiet = TRUE)))})
   
   #download data
   output$downloadData <- downloadHandler(filename = function() {
