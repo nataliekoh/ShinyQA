@@ -1,9 +1,11 @@
 library(shiny)
 
+setwd(getwd())
+
 subjects <- read.csv("all_subjects")
 
-fieldsMandatory <- c("userid", "GoodorBad", "Comments")
-fieldsAll <- c("userid", "GoodorBad", "Comments")
+fieldsMandatory <- c("userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
+fieldsAll <- c("userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
 responsesDir <- file.path("/mnt/home/natkoh/ShinyQA/output")
 epochTime <- function(){as.integer(Sys.time())}
 humanTime <- function(){format(Sys.time(), "%Y%m%d-%H%M%OS")}
@@ -14,3 +16,4 @@ loadData <- function() {
   data <- dplyr::rbind_all(data)
   data
 }
+

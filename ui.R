@@ -1,6 +1,6 @@
 
 shinyUI(fluidPage(
-  titlePanel(h2("Resting State fMRI QA")),
+  titlePanel(h2(strong("Resting State fMRI QA (Rest ON)"))),
   
   sidebarLayout(
     sidebarPanel(
@@ -37,7 +37,7 @@ shinyUI(fluidPage(
         radioButtons("regQA", label = h4("Registrations"),
                      choices = list("Good" = 1, 
                                     "Bad" = 2)),
-        textInput("Comments", label = h4("Overall Comments"), value = "Enter text..."),
+        textAreaInput("Comments", label = h4("Overall Comments"), value = ""),
         actionButton("submit", "Submit", class = "btn-primary")
       ),
       br(),
@@ -47,17 +47,52 @@ shinyUI(fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel("Summary",
-                 h3(textOutput("subviewtext", inline = TRUE)),
-                 div("This subject has been flagged for", style = "color:red"),
-                 uiOutput("markdown")),
-        tabPanel("Acquisition Parameters",
-        textOutput("comment"),
-        h3("T1 Brain Skullstrip"),
-        img(src="100044/T1_brain.gif", height = 400, width = 400)),
+                 h3(textOutput("subviewtext", inline = TRUE)), br(),
+                 div("This subject has been flagged for", style = "color:red"), br(),
+                 textOutput("comment"),
+                 uiOutput("acqpar")),
         tabPanel("Raw Data Movies",
+                  h3("Echo 1"),
+                  plotOutput("rawe001x", height = 300, width = 400),
+                  plotOutput("rawe001y", height = 300, width = 400),
+                  plotOutput("rawe001z", height = 300, width = 400),
+                  h3("Echo 2"),
+                  plotOutput("rawe002x", height = 300, width = 400),
+                  plotOutput("rawe002y", height = 300, width = 400),
+                  plotOutput("rawe002z", height = 300, width = 400),
+                  h3("Echo 3"),
+                  plotOutput("rawe003x", height = 300, width = 400),
+                  plotOutput("rawe003y", height = 300, width = 400),
+                  plotOutput("rawe003z", height = 300, width = 400),
+                  h4("T1 Brain Skullstrip"),
+                  img(src="100044/T1_brain.gif", height = 400, width = 400)),
+        tabPanel("TSNR Images",
                  p("sometext")),
         tabPanel("MEICA Movies",
-                 p("sometext"))
+                 p("sometext"),
+                 h3("TSOC"),
+                 plotOutput("meica.tsocx", height = 300, width = 400),
+                 plotOutput("meica.tsocy", height = 300, width = 400),
+                 plotOutput("meica.tsocz", height = 300, width = 400),
+                 h3("MEDN"),
+                 plotOutput("meica.mednx", height = 300, width = 400),
+                 plotOutput("meica.medny", height = 300, width = 400),
+                 plotOutput("meica.mednz", height = 300, width = 400),
+                 h3("MEFC"),
+                 plotOutput("meica.mefcx", height = 300, width = 400),
+                 plotOutput("meica.mefcy", height = 300, width = 400),
+                 plotOutput("meica.mefcz", height = 300, width = 400)),
+        tabPanel("Motion Metrics",
+                 p("blah blah"),
+                 tableOutput("abs.mean.disp")),
+        tabPanel("Registrations",
+                 p("blah blah blah"),
+                 h3("TSOC to T1"),
+                 plotOutput("tsocT1", width = 800),
+                 h3("TSOC to Subject-Specific Template"),
+                 plotOutput("tsocCT", width = 800),
+                 h3("TSOC to MNI"),
+                 plotOutput("tsocMNI", width = 800))
       )
   )
 )))
