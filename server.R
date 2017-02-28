@@ -3,6 +3,10 @@ library(dplyr); library(digest); library(knitr)
 
 function(input, output, session) {
   
+  subject <- reactive({input$subid})
+  output$subject <- renderText({ input$subid })
+  output$subviewtext <- renderText({ paste("You are now viewing subject: ", input$subid) })
+  
   observe({
     mandatoryFilled <- vapply(fieldsMandatory, function(x) {
       !is.null(input[[x]]) && input[[x]] != ""},
