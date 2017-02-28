@@ -1,0 +1,19 @@
+---
+title:
+runtime: shiny
+output: html_document
+keep_md: yes
+---
+
+```{r engine='bash', echo=FALSE}
+  grep -e 'Patient name' parrec/100044_rest-on.PAR
+  grep -e 'Max. number of dynamics' parrec/100044_rest-on.PAR
+  grep -e 'Repetition time' parrec/100044_rest-on.PAR
+  EchoTime=`tail -3 parrec/100044_rest-on.PAR | head -1 | awk {'print $31'}`
+  echo ".    Echo Time                          :   $EchoTime"
+  grep -e 'Preparation direction' parrec/100044_rest-on.PAR
+  grep -e 'FOV' parrec/100044_rest-on.PAR
+  PixelSpacingX=`tail -3 parrec/100044_rest-on.PAR | head -1 | awk {'print $29'}`
+  PixelSpacingY=`tail -3 parrec/100044_rest-on.PAR | head -1 | awk {'print $30'}`
+  echo ".    Pixel Spacing (x,y in mm)          :   $PixelSpacingX x $PixelSpacingY"
+```
