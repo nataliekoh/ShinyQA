@@ -1,6 +1,28 @@
 library(shiny); library(DT); library(shinyjs)
 library(dplyr); library(digest); library(knitr)
 
+setwd(getwd())
+
+fieldsMandatory <- c("subid", "userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
+fieldsAll <- c("subid","userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
+responsesDir <- "output"
+epochTime <- function(){as.integer(Sys.time())}
+humanTime <- function(){format(Sys.time(), "%Y%m%d-%H%M%OS")}
+
+saveData <- function(data) {
+  fileName <- sprintf("%s_%s.csv", humanTime(), digest::digest(data))
+  write.csv(x = data, file = file.path(responsesDir, fileName),
+            row.names = FALSE, quote = FALSE)
+}
+
+loadData <- function() {
+  files <- list.files(file.path(responsesDir), full.names = TRUE)
+  data <- lapply(files, read.csv, stringsAsFactors = FALSE)
+  #data <- dplyr::rbind_all(data)
+  data <- do.call(rbind, data)
+  data
+}
+
 function(input, output, session) {
   
   #subid
@@ -96,6 +118,8 @@ function(input, output, session) {
       !is.null(input[[x]]) && input[[x]] != ""},
       logical(1))
     mandatoryFilled <- all(mandatoryFilled)
+    
+    shinyjs::toggleState(id = "submit", condition = mandatoryFilled)
   })
   
   formData <- reactive({
@@ -105,24 +129,45 @@ function(input, output, session) {
     data
   })
   
-  saveData <- function(data) {
-    fileName <- sprintf("%s_%s.csv", humanTime(), digest::digest(data))
-    write.csv(x = data, file = file.path(responsesDir, fileName),
-              row.names = FALSE, quote = TRUE)
-  }
+  observeEvent(input$submit, {
+    shinyjs::disable("submit")
+    shinyjs::show("submit_msg")
+    shinyjs::hide("error")
+    
+    tryCatch({
+      saveData(formData())
+      shinyjs::reset("form")
+      shinyjs::hide("form")
+      shinyjs::show("submitted_msg")
+    }, error = function(err) {
+      shinyjs::html("error_msg", err$message)
+      shinyjs::show(id = "error", anim = TRUE)
+    }, finally = {
+      shinyjs::enable("submit")
+      shinyjs::hide("submit_msg")
+    })
+    
+    })
   
-  observeEvent(input$submit, {saveData(formData())})
+  observeEvent(input$submit_another, {
+    shinyjs::show("form")
+    shinyjs::hide("submitted_msg")
+  })
+  
+  output$responsestable <- DT::renderDataTable(
+    loadData(),
+    rownames = FALSE,
+    options = list(searching = FALSE, lengthChange = FALSE)
+  )
+  #observeEvent(input$submit, {shinyjs::enable("submit")})
   
   #download data
-  output$downloadData <- downloadHandler(filename = function() {
-    sprintf("RS_fMRI_QA_logsheet.csv", humanTime())
+  output$downloadData <- downloadHandler(#filename = "RS_fMRI_QA_logsheet.csv",
+  function() {
+    filename = sprintf("rest-on_QALogSheet_%.csv", humanTime())
   },
   content = function(file) {
     write.csv(loadData(), file, row.names = FALSE)
   })
-  
-  #etc
-  output$value <- renderPrint({ input$radio })
-  output$comment <- renderText({ paste("Your comments are:", input$Comments) })
   
 }

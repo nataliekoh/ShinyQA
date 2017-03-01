@@ -1,5 +1,6 @@
 
 shinyUI(fluidPage(
+  shinyjs::useShinyjs(),
   titlePanel(h2(strong("Resting State fMRI QA (Rest ON)"))),
   
   sidebarLayout(fluid = TRUE, 
@@ -29,8 +30,18 @@ shinyUI(fluidPage(
                      choices = list("Good" = 1, 
                                     "Bad" = 2)),
         textAreaInput("Comments", label = h4("Overall Comments"), value = ""),
-        actionButton("submit", "Submit", class = "btn-primary")
+        actionButton("submit", "Submit", class = "btn-primary"),
+        shinyjs::hidden(
+          span(id = "submit_msg", "Saving your response..."),
+          div(id = "error",
+              div(br(), tags$b("Error:"), span(id = "error_msg")))
+        )
       ),
+      shinyjs::hidden( div(
+        id = "submitted_msg",
+        h3("Your response has been logged."),
+        actionLink("submit_another", "Submit another response")
+      )),
       br(),
       downloadButton("downloadData", "Download QA Logsheet")
     ),
@@ -38,10 +49,9 @@ shinyUI(fluidPage(
     mainPanel(#width = 9,
       tabsetPanel(
         tabPanel("Summary",
-                 h3(span(textOutput("subviewtext", inline = TRUE)), style = "color:blue"), br(),
+                 h3(span(textOutput("subviewtext", inline = TRUE)), style = "color:blue", align = "center"), br(),
                  div(em("This subject has been flagged for the following parameters:", style = "color:red")), br(),
-                 uiOutput("warnings"),
-                 textOutput("comment"), br(),
+                 uiOutput("warnings"), br(),
                  h3("Acquistion Parameters"),
                  uiOutput("acqpar")),
         tabPanel("Raw Data Movies",
@@ -60,9 +70,8 @@ shinyUI(fluidPage(
                   h4("T1 Brain Skullstrip"),
                   img(src="100044/T1_brain.gif", height = 400, width = 400)),
         tabPanel("TSNR Images",
-                 p("sometext")),
+                 p("sometext blah blah blah")),
         tabPanel("MEICA Movies",
-                 p("sometext"),
                  h3("TSOC"),
                  plotOutput("meica.tsocx", height = 300, width = 400),
                  plotOutput("meica.tsocy", height = 300, width = 400),
@@ -83,5 +92,11 @@ shinyUI(fluidPage(
                  h3("TSOC to Subject-Specific Template"),
                  plotOutput("tsocCT", width = 900, inline = TRUE),
                  h3("TSOC to MNI"),
-                 plotOutput("tsocMNI", width = 900, inline = TRUE))))
-)))
+                 plotOutput("tsocMNI", width = 900, inline = TRUE)),
+        tabPanel("Logsheets",
+                 uiOutput("responsestable"))
+        )
+      )
+    )
+  )
+)
