@@ -75,24 +75,15 @@ function(input, output, session) {
     filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_reoriented_to_mni_epireg_ants.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
+  #warnings
+  output$warnings <- renderUI({
+    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_WARNING.Rmd", sep = "")), 
+                                       quiet = TRUE)))})
+  
   #quantitative measures
   output$quantmeasures <- renderUI({
     HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_motion.Rmd", sep = "")), 
                                        quiet = TRUE)))})
-  
-  # abs.mean.disp <- as.numeric(read.csv(file.path("./www", 
-  #                                                paste(input$subid, "/quantmeasures/rest-on_data_abs_mean.rms", sep = "")),
-  #                                      header = FALSE))
-  #if (abs.mean.disp > 2.0) {output$abs.mean.disp <- renderText ({ "ABSOLUTE DISP above threshold" })}
-  # output$abs.warning <- renderText({
-  #   abs.mean.disp <- as.numeric(read.csv(file.path("./www", 
-  #                                                  paste(input$subid, 
-  #                                                        "/quantmeasures/rest-on_data_abs_mean.rms", sep = "")),
-  #                                        header = FALSE))
-  #   if (abs.mean.disp > 2) {
-  #     print("abs disp above threshold")
-  #   }
-  # })
   
   #acquisition parameters
   output$acqpar <- renderUI({

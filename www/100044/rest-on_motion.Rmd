@@ -13,14 +13,6 @@ val2=`cat quantmeasures/rest-on_data_rel_mean.rms`
 echo "Mean Relative Displacement : $val2 mm"
 ```
 
-```{r, results = "hide", echo = FALSE}
-absdisp <- as.numeric(read.csv("quantmeasures/rest-on_data_abs_mean.rms", header = FALSE))
-
-absdisp.warn <- if (absdisp < 2) {print("abs disp below threshold")}
-
-```
-**`r absdisp.warn`**
-
 **List of All Outlier Volumes (e002)**
 ```{r engine='bash', echo=FALSE}
 cat quantmeasures/rest-on_e002_outliers_volumes.txt
