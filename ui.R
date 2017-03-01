@@ -2,20 +2,11 @@
 shinyUI(fluidPage(
   titlePanel(h2(strong("Resting State fMRI QA (Rest ON)"))),
   
-  sidebarLayout(
-    sidebarPanel(
+  sidebarLayout(fluid = TRUE, 
+    sidebarPanel(#width = 3,
       selectInput("subid", 
                   label = "Select Subject ID",
                   choices = list("100044", "100054")),
-      #selectInput("rs_var", 
-       #           label = "Select QA Measure",
-        #          choices = list("T1 Skullstrip",#this should be in structuralQA 
-         #                        "Acquisition Parameters",
-          #                       "Raw Data Movies",
-           #                      "TSNR Images",
-            #                     "MEICA Movies",
-             #                    "Motion Parameters",
-              #                   "Registrations")),
       div(
         id = "form",
         textInput("userid", label = h4("Your UW NetID"), value = ""),
@@ -44,11 +35,12 @@ shinyUI(fluidPage(
       downloadButton("downloadData", "Download QA Logsheet")
     ),
 
-    mainPanel(
+    mainPanel(#width = 9,
       tabsetPanel(
         tabPanel("Summary",
                  h3(textOutput("subviewtext", inline = TRUE)), br(),
                  div("This subject has been flagged for", style = "color:red"), br(),
+                 #textOutput("abs.warning"),
                  textOutput("comment"),
                  uiOutput("acqpar")),
         tabPanel("Raw Data Movies",
@@ -83,16 +75,12 @@ shinyUI(fluidPage(
                  plotOutput("meica.mefcy", height = 300, width = 400),
                  plotOutput("meica.mefcz", height = 300, width = 400)),
         tabPanel("Motion Metrics",
-                 p("blah blah"),
                  uiOutput("quantmeasures")),
         tabPanel("Registrations",
-                 p("blah blah blah"),
                  h3("TSOC to T1"),
-                 plotOutput("tsocT1", width = 800, inline = TRUE),
+                 plotOutput("tsocT1", width = 900, inline = TRUE),
                  h3("TSOC to Subject-Specific Template"),
-                 plotOutput("tsocCT", width = 800, inline = TRUE),
+                 plotOutput("tsocCT", width = 900, inline = TRUE),
                  h3("TSOC to MNI"),
-                 plotOutput("tsocMNI", width = 800, inline = TRUE))
-      )
-  )
+                 plotOutput("tsocMNI", width = 900, inline = TRUE))))
 )))
