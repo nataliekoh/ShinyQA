@@ -1,0 +1,34 @@
+#! /bin/bash
+
+TEMPLATEDIR=/mnt/home/natkoh/shinyQA
+PROJECTDIR=/mnt/panuc/udallp2
+SUBID=100044
+NO=1
+TASK=rest-on
+
+# parrec
+rm ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_parrec.Rmd
+cp ${TEMPLATEDIR}/TASK_parrec.Rmd  ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_parrec.Rmd
+cd ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA
+sed -i "s~PROJECTDIR~$PROJECTDIR~g" ${TASK}_parrec.Rmd 
+sed -i "s/SUBID/$SUBID/g" ${TASK}_parrec.Rmd 
+sed -i "s/NO/$NO/g" ${TASK}_parrec.Rmd 
+sed -i "s/TASK/$TASK/g" ${TASK}_parrec.Rmd
+
+# motion
+rm ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_motion.Rmd
+cp ${TEMPLATEDIR}/TASK_motion.Rmd  ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_motion.Rmd
+cd  ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA
+sed -i "s~PROJECTDIR~$PROJECTDIR~g" ${TASK}_motion.Rmd 
+sed -i "s/SUBID/$SUBID/g" ${TASK}_motion.Rmd 
+sed -i "s/NO/$NO/g" ${TASK}_motion.Rmd 
+sed -i "s/TASK/$TASK/g" ${TASK}_motion.Rmd
+
+# warning
+rm ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_warning.Rmd
+cp ${TEMPLATEDIR}/TASK_warning.Rmd  ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA/${TASK}_warning.Rmd
+cd  ${PROJECTDIR}/subjects/${SUBID}/session${NO}/QA
+sed -i "s~PROJECTDIR~$PROJECTDIR~g" ${TASK}_warning.Rmd 
+sed -i "s/SUBID/$SUBID/g" ${TASK}_warning.Rmd 
+sed -i "s/NO/$NO/g" ${TASK}_warning.Rmd 
+sed -i "s/TASK/$TASK/g" ${TASK}_warning.Rmd
