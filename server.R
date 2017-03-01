@@ -3,8 +3,10 @@ library(dplyr); library(digest); library(knitr)
 
 setwd(getwd())
 
-fieldsMandatory <- c("subid", "userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
-fieldsAll <- c("subid","userid", "parrecQA", "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
+fieldsMandatory <- c("subid", "taskid", "sessionid", "userid", "parrecQA", 
+                     "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
+fieldsAll <- c("subid", "taskid", "sessionid", "userid", "parrecQA", 
+               "rawmoviesQA", "tsnrQA", "meicaQA", "motionQA", "regQA", "Comments")
 responsesDir <- "output"
 epochTime <- function(){as.integer(Sys.time())}
 humanTime <- function(){format(Sys.time(), "%Y%m%d-%H%M%OS")}
@@ -19,7 +21,6 @@ loadData <- function() {
   files <- list.files(file.path(responsesDir), full.names = TRUE)
   data <- lapply(files, read.csv, stringsAsFactors = FALSE)
   data <- dplyr::rbind_all(data)
-  #data <- do.call(rbind, data)
   data
 }
 
@@ -28,88 +29,245 @@ function(input, output, session) {
   #subid
   subject <- reactive({ input$subid })
   output$subject <- renderText({ input$subid })
-  output$subviewtext <- renderText({ paste("You are now viewing subject: ", input$subid, "for", input$taskid) })
+  output$subviewtext <- renderText({ paste("You are now viewing subject ", 
+                                           input$subid, "for", input$taskid, 
+                                           ":", input$sessionid) })
   
   #paths to all QA images
   output$rawe001x <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/", input$taskid, "_e001_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e001_x_animation.gif", sep = ""))) 
     list(src = filename)}, deleteFile = FALSE)
   output$rawe001y <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/", input$taskid, "_e001_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e001_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe001z <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e001_z_animation.gif", sep = "")))
-    list(src = filename)}, deleteFile = FALSE)
+   filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                       paste(input$subid, "/", input$sessionid, 
+                                             "/images/", input$taskid,
+                                       "_e001_z_animation.gif", sep = "")))
+  list(src = filename)}, deleteFile = FALSE)
   output$rawe002x <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e002_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e002_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe002y <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e002_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e002_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe002z <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e002_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e002_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe003x <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e003_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e003_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe003y <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e003_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e003_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe003z <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e003_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e003_z_animation.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  
+  output$tsnr.e001x <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e001_tsnr_mean_x.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e001y <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e001_tsnr_mean_y.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e001z <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e001_tsnr_mean_z.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e002x <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_tsnr_mean_x.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e002y <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_tsnr_mean_y.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e002z <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_tsnr_mean_z.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e003x <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e003_tsnr_mean_x.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e003y <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e003_tsnr_mean_y.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$tsnr.e003z <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e003_tsnr_mean_z.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
   output$meica.tsocx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_tsoc_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rmeica.tsocy <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "rest-on_e00213_tsoc_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.tsocz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_tsoc_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mednx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_medn_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.medny <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_medn_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mednz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_medn_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_mefc_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcy <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_mefc_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_mefc_z_animation.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  
+  output$motion.rot <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_MotionGraphRotations.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$motion.trans <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_MotionGraphTranslations.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$motion.fd <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_FramewiseDisplacement.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$motion.dvars02 <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_DVARS_raw.gif", sep = "")))
+    list(src = filename)}, deleteFile = FALSE)
+  output$motion.dvars.tsocmedn <- renderImage({ 
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid, 
+                                              "_e002_DVARS_dn-oc.gif.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
   output$tsocT1 <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_reoriented_to_T1.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_tsoc_reoriented_to_T1.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$tsocCT <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_to_CT_epireg_ants.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_tsoc_to_CT_epireg_ants.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$tsocMNI <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_reoriented_to_mni_epireg_ants.gif", sep = "")))
+    filename <- normalizePath(file.path("PROJECTDIR/subjects", 
+                                        paste(input$subid, "/", input$sessionid, 
+                                              "/images/", input$taskid,
+                                              "_e00213_tsoc_reoriented_to_mni_epireg_ants.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
   #warnings
   output$warnings <- renderUI({
-    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_WARNING.Rmd", sep = "")), 
+    HTML(markdown::markdownToHTML(knit(file.path("PROJECTDIR/subjects", 
+                                                 paste(input$subid, "/", input$sessionid,
+                                                       "/QA/", input$taskid, "_warning.Rmd", sep = "")), 
                                        quiet = TRUE)))})
   
   #quantitative measures
-  output$quantmeasures <- renderUI({
-    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_motion.Rmd", sep = "")), 
+  output$motionmetrics <- renderUI({
+    HTML(markdown::markdownToHTML(knit(file.path("PROJECTDIR/subjects", 
+                                                 paste(input$subid, "/", input$sessionid,
+                                                       "/QA/", input$taskid, "_motion.Rmd", sep = "")), 
                                        quiet = TRUE)))})
   
   #acquisition parameters
   output$acqpar <- renderUI({
-    HTML(markdown::markdownToHTML(knit(file.path("./www", paste(input$subid, "/rest-on_parrec.Rmd", sep = "")), 
+    HTML(markdown::markdownToHTML(knit(file.path("PROJECTDIR/subjects", 
+                                                 paste(input$subid, "/", input$sessionid,
+                                                       "/QA/", input$taskid, "_parrec.Rmd", sep = "")), 
                                        quiet = TRUE)))})
   
   #form
