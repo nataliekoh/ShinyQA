@@ -18,8 +18,8 @@ saveData <- function(data) {
 loadData <- function() {
   files <- list.files(file.path(responsesDir), full.names = TRUE)
   data <- lapply(files, read.csv, stringsAsFactors = FALSE)
-  #data <- dplyr::rbind_all(data)
-  data <- do.call(rbind, data)
+  data <- dplyr::rbind_all(data)
+  #data <- do.call(rbind, data)
   data
 }
 
@@ -28,14 +28,14 @@ function(input, output, session) {
   #subid
   subject <- reactive({ input$subid })
   output$subject <- renderText({ input$subid })
-  output$subviewtext <- renderText({ paste("You are now viewing subject: ", input$subid) })
+  output$subviewtext <- renderText({ paste("You are now viewing subject: ", input$subid, "for", input$taskid) })
   
   #paths to all QA images
   output$rawe001x <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e001_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/", input$taskid, "_e001_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe001y <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e001_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/", input$taskid, "_e001_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rawe001z <- renderImage({ 
     filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e001_z_animation.gif", sep = "")))
@@ -60,41 +60,41 @@ function(input, output, session) {
     list(src = filename)}, deleteFile = FALSE)
   
   output$meica.tsocx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$rmeica.tsocy <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.tsocz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mednx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_medn_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.medny <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_medn_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mednz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_medn_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_medn_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcx <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_mefc_x_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_x_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcy <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_mefc_y_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_y_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$meica.mefcz <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_mefc_z_animation.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_mefc_z_animation.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
   output$tsocT1 <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_reoriented_to_T1.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_reoriented_to_T1.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$tsocCT <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_to_CT_epireg_ants.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_to_CT_epireg_ants.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   output$tsocMNI <- renderImage({ 
-    filename <- normalizePath(file.path("./www", paste(input$subid, "/rest-on_e00213_tsoc_reoriented_to_mni_epireg_ants.gif", sep = "")))
+    filename <- normalizePath(file.path("./www", paste(input$subid, "/images/rest-on_e00213_tsoc_reoriented_to_mni_epireg_ants.gif", sep = "")))
     list(src = filename)}, deleteFile = FALSE)
   
   #warnings
@@ -154,17 +154,17 @@ function(input, output, session) {
     shinyjs::hide("submitted_msg")
   })
   
-  output$responsestable <- DT::renderDataTable(
+  #logsheet table display
+  output$responsesTable <- DT::renderDataTable(
     loadData(),
     rownames = FALSE,
     options = list(searching = FALSE, lengthChange = FALSE)
   )
-  #observeEvent(input$submit, {shinyjs::enable("submit")})
   
   #download data
-  output$downloadData <- downloadHandler(#filename = "RS_fMRI_QA_logsheet.csv",
+  output$downloadData <- downloadHandler(
   function() {
-    filename = sprintf("rest-on_QALogSheet_%.csv", humanTime())
+    filename = sprintf("rest-on_QALogSheet_%s.csv", humanTime())
   },
   content = function(file) {
     write.csv(loadData(), file, row.names = FALSE)

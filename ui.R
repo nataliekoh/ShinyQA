@@ -1,13 +1,17 @@
 
 shinyUI(fluidPage(
   shinyjs::useShinyjs(),
-  titlePanel(h2(strong("Resting State fMRI QA (Rest ON)"))),
+  titlePanel(h2(strong("Functional MRI QA"))),
   
   sidebarLayout(fluid = TRUE, 
     sidebarPanel(#width = 3,
       selectInput("subid", 
                   label = "Select Subject ID",
                   choices = list("100044", "100054")),
+      selectInput("taskid", 
+                  label = "Select Task",
+                  choices = list("rest-on", "rest-off",
+                                 "axcpt-on", "axcpt-off")),
       div(
         id = "form",
         textInput("userid", label = h4("Your UW NetID"), value = ""),
@@ -93,8 +97,8 @@ shinyUI(fluidPage(
                  plotOutput("tsocCT", width = 900, inline = TRUE),
                  h3("TSOC to MNI"),
                  plotOutput("tsocMNI", width = 900, inline = TRUE)),
-        tabPanel("Logsheets",
-                 uiOutput("responsestable"))
+        tabPanel("Logsheet",
+                 DT::dataTableOutput("responsesTable"))
         )
       )
     )
