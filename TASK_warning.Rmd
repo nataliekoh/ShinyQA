@@ -10,7 +10,7 @@ absdisp <- as.numeric(read.csv("PROJECTDIR/subjects/SUBID/sessionNO/mcflirt_data
 absdisp.warn <- if (absdisp > 2) {print("abs disp above threshold")}
 
 totaloutliers <- nrow(as.data.frame(read.csv("PROJECTDIR/subjects/SUBID/sessionNO/TASK/SUBID_all_outliers.txt", header = FALSE)))
-numvols <- as.numeric(read.csv("PROJECTDIR/subjects/SUBID/sessionNO/TASK/numvols", header = FALSE))
+numvols <- as.numeric(read.csv("PROJECTDIR/subjects/SUBID/sessionNO/TASK/TASK_numvols", header = FALSE))
 percent.outliers <- totaloutliers / numvols
 percent.warn <- if (percent.outliers > 10) {print("percent outliers above threshold")}
 
@@ -42,12 +42,12 @@ dvars.warn.tsoc <- if (dvarsvals_tsoc_mean > dvars_tsoc_thresh) {print("mean DVA
 dvars.warn.medn <- if (dvarsvals_medn_mean > dvars_medn_thresh) {print("mean DVARS value above threshold for medn")}
 
 ```
-<span style="color:red">`r absdisp.warn`</span>
-<span style="color:red">`r percent.warn`</span>
-<span style="color:red">`r fd.warn.e002`</span>
-<span style="color:red">`r fd.warn.tsoc`</span>
-<span style="color:red">`r fd.warn.medn`</span>
-<span style="color:red">`r dvars.warn.e002`</span>
-<span style="color:red">`r dvars.warn.tsoc`</span>
-<span style="color:red">`r dvars.warn.medn`</span>
+<span style="color:red">`r absdisp.warn`</span><br>
+<span style="color:red">`r percent.warn`</span><br>
+<span style="color:red">`r fd.warn.e002`</span><br>
+<span style="color:red">`r fd.warn.tsoc`</span><br>
+<span style="color:red">`r fd.warn.medn`</span><br>
+<span style="color:red">`r dvars.warn.e002`</span><br>
+<span style="color:red">`r dvars.warn.tsoc`</span><br>
+<span style="color:red">`r dvars.warn.medn`</span><br>
 
