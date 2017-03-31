@@ -5,7 +5,27 @@ output: html_document
 keep_md: no
 ---
 
+```{r engine='bash', echo=FALSE}
+skullstripDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/mprage/skullstripDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+
+if [ `cat PROJECTDIR/subjects/SUBID/sessionNO/0_group` == "CONTROL" ]; then
+   rest-on_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/rest-on/rest-on_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+   axcpt-on_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/axcpt-on/axcpt-on_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+else
+   rest-on_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/rest-on/rest-on_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+   axcpt-on_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/axcpt-on/axcpt-on_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+   rest-off_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/rest-off/rest-off_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+   axcpt-off_regDICE=`grep 'value="' PROJECTDIR/subjects/SUBID/sessionNO/axcpt-off/axcpt-off_regDICE | awk '{print $7}' | grep -o '[0-9].[0-9]*'`
+fi
+```
+
 ```{r, results = "hide", echo = FALSE}
+skullstrip.warn <- if (DICE < 0.9) {print("check skullstrip")}
+rest-on_reg.warn <- if (rest-on_regDICE < 0.75) {print("check rest-on registration")}
+rest-off_reg.warn <- if (rest-off_regDICE < 0.75) {print("check rest-off registration")}
+axcpt-on_reg.warn <- if (axcpt-on_regDICE < 0.75) {print("check axcpt-on registration")}
+axcpt-off_reg.warn <- if (axcpt-off_regDICE < 0.75) {print("check axcpt-off registration")}
+
 absdisp <- as.numeric(read.csv("PROJECTDIR/subjects/SUBID/sessionNO/mcflirt_data/TASK_data_abs_mean.rms", header = FALSE))
 absdisp.warn <- if (absdisp > 2) {print("abs disp above threshold")}
 
@@ -42,6 +62,11 @@ dvars.warn.tsoc <- if (dvarsvals_tsoc_mean > dvars_tsoc_thresh) {print("mean DVA
 dvars.warn.medn <- if (dvarsvals_medn_mean > dvars_medn_thresh) {print("mean DVARS value above threshold for medn")}
 
 ```
+<span style="color:red">`r skullstrip.warn`</span><br>
+<span style="color:red">`r rest-on_reg.warn`</span><br>
+<span style="color:red">`r rest-off_reg.warn`</span><br>
+<span style="color:red">`r axcpt-on_reg.warn`</span><br>
+<span style="color:red">`r axcpt-off_reg.warn`</span><br>
 <span style="color:red">`r absdisp.warn`</span><br>
 <span style="color:red">`r percent.warn`</span><br>
 <span style="color:red">`r fd.warn.e002`</span><br>

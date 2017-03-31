@@ -3,7 +3,7 @@ shinyUI(fluidPage(
   shinyjs::useShinyjs(),
   titlePanel(h2(strong("Functional MRI QA"))),
   
-  sidebarLayout(fluid = TRUE, 
+  sidebarLayout(fluid = TRUE,
     sidebarPanel(#width = 3,
       selectInput("subid", 
                   label = "Select Subject ID",
@@ -56,8 +56,10 @@ shinyUI(fluidPage(
     mainPanel(#width = 9,
       tabsetPanel(
         tabPanel("Summary",
-                 h4(span(textOutput("subviewtext", inline = TRUE)), 
-                    style = "color:purple", align = "center"), br(),
+                 h3(span(textOutput("subviewtext", inline = TRUE)), 
+                    style = "color:blue", align = "center"), br(),
+                 h4(span(textOutput("subviewtext2", inline = TRUE)),
+                   style = "color:black", align = "left"), br(),
                  div(em("This subject has been flagged for the following parameters:", style = "color:red")),
                  uiOutput("warnings"), br(),
                  h3("Acquistion Parameters"),

@@ -27,13 +27,42 @@ loadData <- function() {
 }
 
 function(input, output, session) {
-  
+
   #subid
   subject <- reactive({ input$subid })
   output$subject <- renderText({ input$subid })
   output$subviewtext <- renderText({ paste("You are now viewing subject ", 
-                                           input$subid, "for", input$taskid, 
+                                           input$subid, "[",
+                                           as.data.frame(read.table(file = file.path(PROJECTDIR, 
+                                                                                     "subjects", 
+                                                                                     paste(input$subid, "/", input$sessionid, 
+                                                                                           "/0_group", sep = "")), sep = "", stringsAsFactors = FALSE))[1,1],
+                                           "]",
+                                           "for", input$taskid, 
                                            ":", input$sessionid) })
+  output$subviewtext2 <- renderText({ "Note: If subject is a CONTROL, there will be no rest-off and axcpt-off data to look at.
+    Those pages will show up empty."})
+  
+  #subject group - control or patient?
+  # output$group <- renderText({ paste("This subject is a ",
+  #                                    as.data.frame(read.table(file = file.path(PROJECTDIR, "subjects", 
+  #                                    paste(input$subid, "/", input$sessionid, 
+  #                                          "/0_group", sep = "")), sep = "",
+                                    # stringsAsFactors = FALSE))[1,1]) })
+  # group <- as.data.frame(read.table(file = file.path(PROJECTDIR, "subjects",
+  #                                                    paste(input$subid, "/", input$sessionid,
+  #                                                          "/0_group", sep = "")), sep = "",
+  #                                   stringsAsFactors = FALSE))[1,1]
+  # if (group == "CONTROL") {
+  #   output$groupmessage <- renderText({ paste("Since this subject is a ",
+  #                                             as.data.frame(read.table(file = file.path(PROJECTDIR, "subjects",
+  #                                                                                       paste(input$subid, "/", input$sessionid,
+  #                                                                                             "/0_group", sep = "")), sep = "",
+  #                                                                      stringsAsFactors = FALSE))[1,1],
+  #     ", there will be no rest-off and axcpt-off data to look at. Those pages will show up empty.") })
+  # } else {
+  #   output$groupmessage <- NULL
+  # }
   
   #paths to all QA images
   output$rawe001x <- renderImage({ 
@@ -324,7 +353,7 @@ function(input, output, session) {
   #download data
   output$downloadData <- downloadHandler(
   function() {
-    filename = sprintf("rest-on_QALogSheet_%s.csv", humanTime())
+    filename = sprintf("QALogSheet_%s.csv", humanTime())
   },
   content = function(file) {
     write.csv(loadData(), file, row.names = FALSE)
